@@ -1,7 +1,8 @@
 Project Structure
 
 
-├── config/db.js           ---- Database connection
+├── config/db.js          
+ ---- Database connection
 ├── controllers/authController.js  ---- Authentication logic
 ├── middleware/verifyToken.js      ---- JWT validation
 ├── routes/authRoutes.js           ---- API routes
