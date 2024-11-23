@@ -1,10 +1,10 @@
 Project Structure
 
 
-├── config/db.js           
-├── controllers/authController.js 
+├── config/db.js (db configurations)            
+├── controllers/authController.js (api logic)
 ├── middleware/verifyToken.js     
-├── routes/authRoutes.js           
+├── routes/authRoutes.js  (routing)         
 ├── utils/encrypt.js          
 ├── server.js                     
 └── .env 
