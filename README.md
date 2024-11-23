@@ -1,13 +1,13 @@
 Project Structure
 
 
-├── config/db.js           # Database connection
-├── controllers/authController.js  # Authentication logic
-├── middleware/verifyToken.js      # JWT validation
-├── routes/authRoutes.js           # API routes
-├── utils/encrypt.js               # Encryption utilities
-├── server.js                      # Main entry point
-└── .env                           # Environment variables
+├── config/db.js           ---- Database connection
+├── controllers/authController.js  ---- Authentication logic
+├── middleware/verifyToken.js      ---- JWT validation
+├── routes/authRoutes.js           ---- API routes
+├── utils/encrypt.js               ---- Encryption utilities
+├── server.js                      ---- Main entry point
+└── .env                           ---- Environment variables
 
 
 -------------------------------------------------------------------------------------------
