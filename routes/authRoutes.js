@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateUser } = require('../controllers/authController');
-// const { handleInvestorsAPI } = require('../controllers/InvestorsController');
+const { createCustomer } = require('../controllers/createCustomerController');
+const { fetchCustomer } = require('../controllers/searchCustomer');
+
 console.log("authroutes");
 
 router.post('/login', authenticateUser);
-//router.post('/investordetails', handleInvestorsAPI);
+router.post('/createCustomer', createCustomer);
+router.post('/searchCustomer', fetchCustomer);
+
 
 module.exports = router;

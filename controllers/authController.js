@@ -4,18 +4,18 @@ const { encrypt256, decrypt256 } = require('../utils/encrypt');
 const axios = require('axios');
 
 const authenticateUser = async (req, res) => {
-  const {  username, password } = req.body;
+  const { username, password, deviceType } = req.body;
   try {
-    let response = { status:'', message: '', userName: 'NOT_AVAILABLE', Authentication:'NOT_DONE',LocationAccess:'NOT_VALID' };
+    let response = { status:'', message: '', errorMessage:null, userName: 'NOT_AVAILABLE', Authentication:'NOT_DONE',LocationAccess:'NOT_VALID' };
 
     // User check: Retrieving user from the database
     const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
     const userNamefromdb = rows[0]?.username || '';
     console.log("User check: Retrieving user from the database", userNamefromdb);
     if (rows.length === 0) {
-      response.message = 'USER_DOESNT_EXIST';
-      console.log("User check failed: USER_DOESNT_EXIST", response.message);
-      res.json(response.message);
+      response.errorMessage = 'USER_DOESNT_EXIST';
+      console.log("User check failed: USER_DOESNT_EXIST", response.errorMessage);
+      res.json(response.errorMessage);
       return; 
     } else {
       response.userName = userNamefromdb;
@@ -32,8 +32,8 @@ const authenticateUser = async (req, res) => {
     //console.log("meow", decryptedPassword);
     const validPassword = (encryptedPassword.encryptedData === user.password);
     if (!validPassword) {
-      response.message = 'INVALID_PASSWORD';
-      console.log("Password check failed: INVALID_PASSWORD", response.message);
+      response.errorMessage = 'INVALID_PASSWORD';
+      console.log("Password check failed: INVALID_PASSWORD", response.errorMessage);
       res.json(response);
       return; 
     }else {
@@ -41,22 +41,33 @@ const authenticateUser = async (req, res) => {
       response.Authentication = 'DONE';
     }
 
-    if(!response.message && response.Authentication == 'DONE' && rows.length !== 0 ){
-      response.status = 200
-    }else{
-      response.status = 'ERROR'
+    // Device type check: Validating device type
+    const [deviceRows] = await pool.query('SELECT * FROM device_types WHERE device_type = ?', [deviceType]);
+    if (deviceRows.length === 0) {
+      response.errorMessage = 'INVALID_DEVICE_TYPE';
+      console.log("Device type check failed: INVALID_DEVICE_TYPE", response.errorMessage);
+      res.json(response);
+      return;
+    } else {
+      console.log("Device type check successful: Valid device type");
+    }
+
+    if (!response.errorMessage && response.Authentication === 'DONE' && rows.length !== 0) {
+      response.status = 200;
+    } else {
+      response.status = 'ERROR';
     }
 
         // Step 5: Generating JWT token
-        if (!response.message) {
+        if (!response.errorMessage) {
           const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
           response.token = token;
         }
 
     res.json(response);
   } catch (err) {
-    console.log("Error occurred during authentication:", err.message);
-    res.status(500).json({ message: err.message });
+    console.log("Error occurred during authentication:", err.errorMessage);
+    res.status(500).json({ errorMessage: err.errorMessage });
   }
 };
 
