@@ -3,12 +3,19 @@ const pool = require('../config/db');
 const fetchCustomer = async (req, res) => {
   const { customerName, customerMobileNo, boutiqueId } = req.body;
   try {
-    let response = { status: '', message: '', errorMessage: null, customers: [] };
+    let response = {
+      status: '',
+      data: {
+        message: '',
+        errorMessage: null,
+        customers: [],
+      },
+    };
 
     // Validation: Ensure at least one parameter with minimum 4 characters is provided
     if ((!customerName || customerName.length < 4) && (!customerMobileNo || customerMobileNo.length < 4)) {
-      response.errorMessage = 'MISSING_OR_INVALID_PARAMETERS';
-      console.log("Validation failed: MISSING_OR_INVALID_PARAMETERS", response.errorMessage);
+      response.data.errorMessage = 'MISSING_OR_INVALID_PARAMETERS';
+      console.log("Validation failed: MISSING_OR_INVALID_PARAMETERS", response.data.errorMessage);
       res.json(response);
       return;
     }
@@ -30,16 +37,16 @@ const fetchCustomer = async (req, res) => {
     const [customerRows] = await pool.query(query, params);
 
     if (customerRows.length === 0) {
-      response.errorMessage = 'CUSTOMERS_NOT_FOUND';
-      console.log("Customer fetch failed: CUSTOMERS_NOT_FOUND", response.errorMessage);
+      response.data.errorMessage = 'CUSTOMERS_NOT_FOUND';
+      console.log("Customer fetch failed: CUSTOMERS_NOT_FOUND", response.data.errorMessage);
       res.json(response);
       return;
     }
 
     // Return the list of customers matching the search criteria
     response.status = 200;
-    response.message = 'Customers fetched successfully';
-    response.customers = customerRows.map(customer => ({
+    response.data.message = 'Customers fetched successfully';
+    response.data.customers = customerRows.map(customer => ({
       customer_id: customer.customer_id,
       customer_name: customer.customer_name,
       email: customer.email,
@@ -48,7 +55,7 @@ const fetchCustomer = async (req, res) => {
       user_id: customer.user_id
     }));
 
-    console.log("Customer fetch successful:", response.message);
+    console.log("Customer fetch successful:", response.data.message);
     res.json(response);
   } catch (err) {
     console.log("Error occurred during customer fetch:", err.message);
