@@ -10,7 +10,7 @@ const pool = mysql.createPool({
 
 pool.getConnection()
   .then(connection => {
-    console.log('Database connection established successfully');
+    console.log('Database connection established successfully.');
     connection.release();
   })
   .catch(error => {
@@ -18,3 +18,4 @@ pool.getConnection()
   });
 
 module.exports = pool;
+
