@@ -24,3 +24,6 @@ steps:
   - '--allow-unauthenticated'
   - '--logging'
   - 'CLOUD_LOGGING_ONLY'
+  # Add logging options to build
+options:
+  logging: CLOUD_LOGGING_ONLY
