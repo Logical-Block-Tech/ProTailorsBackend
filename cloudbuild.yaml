@@ -22,8 +22,6 @@ steps:
   - 'managed'
   # Optional: if you want to allow unauthenticated access
   - '--allow-unauthenticated'
-  - '--logging'
-  - 'CLOUD_LOGGING_ONLY'
   # Add logging options to build
 options:
   logging: CLOUD_LOGGING_ONLY
