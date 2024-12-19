@@ -1,7 +1,7 @@
 const pool = require('../config/db');
 
 const getBoutiqueDetails = async (req, res) => {
-  const { boutiqueId ,user_id} = req.body;
+  const { boutiqueId ,username} = req.body;
 
   try {
     let response = {
@@ -14,7 +14,7 @@ const getBoutiqueDetails = async (req, res) => {
     };
 
     // Check if the boutique exists
-    const [boutiqueRows] = await pool.query('SELECT * FROM boutiques WHERE id = ? AND user_id = ?', [boutiqueId, user_id]);
+    const [boutiqueRows] = await pool.query('SELECT * FROM boutiques WHERE id = ? AND username = ?', [boutiqueId, username]);
 
     if (boutiqueRows.length === 0) {
       response.data.errorMessage = 'BOUTIQUE_NOT_FOUND';
